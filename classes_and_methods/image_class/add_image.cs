@@ -44,6 +44,7 @@ public partial class Image
                 Id = (UInt32)tree.ChildElements.Count - 1,
             });
             
+            
             //add the part idk why:
             //https://social.msdn.microsoft.com/Forums/office/en-US/a0a7e52b-6686-4ac6-8e2e-a6d5ec1e9d59/read-write-tags-in-powerpoint-using-openxml-in-c?forum=oxmlsdk
             //  UserDefinedTagsPart userTags = slidePart.AddNewPart<UserDefinedTagsPart>("rId2");
@@ -56,7 +57,7 @@ public partial class Image
             // picture.NonVisualPictureProperties.Append(tagList1);
             // userTags.TagList = tagList1;
 
-            CustomTag.AddCustomTagToPicture("Test", "Value is 100", slidePart, picture);
+            // CustomTag.AddCustomTagToPicture("Test", "Value is 100", presentationPart, picture);
 
             var nonVisualPictureDrawingProperties = new DocumentFormat.OpenXml.Presentation.NonVisualPictureDrawingProperties();
             nonVisualPictureDrawingProperties.Append(new DocumentFormat.OpenXml.Drawing.PictureLocks()
@@ -74,7 +75,7 @@ public partial class Image
             var blipExtensionList1 = new DocumentFormat.OpenXml.Drawing.BlipExtensionList();
             var blipExtension1 = new DocumentFormat.OpenXml.Drawing.BlipExtension()
             {
-                Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}"
+                Uri = "{hello}"
             };
             var useLocalDpi1 = new DocumentFormat.OpenXml.Office2010.Drawing.UseLocalDpi()
             {
