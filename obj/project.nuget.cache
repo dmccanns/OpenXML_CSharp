@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "8gN8WkXMi6MRDTT4aDQLFdHqCwDmYg0cvvbA+T14QiCrsiYkq86antnYT10XL0JGzXOF+7Q+/lk4HlYKn8qOqQ==",
+  "success": true,
+  "projectFilePath": "/Users/dmccanns/Desktop/openXML_cSharp/openXML_cSharp.csproj",
+  "expectedPackageFiles": [
+    "/Users/dmccanns/.nuget/packages/documentformat.openxml/2.17.1/documentformat.openxml.2.17.1.nupkg.sha512",
+    "/Users/dmccanns/.nuget/packages/system.io.packaging/4.7.0/system.io.packaging.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
