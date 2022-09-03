@@ -34,38 +34,23 @@ public partial class Image
                 .First();
             
             var picture = new DocumentFormat.OpenXml.Presentation.Picture();
-            //TODO: change this
-            picture.SetAttribute(new DocumentFormat.OpenXml.OpenXmlAttribute("Type", "", "query-mixpanel-insights"));
 
-            picture.NonVisualPictureProperties = new DocumentFormat.OpenXml.Presentation.NonVisualPictureProperties();
-            picture.NonVisualPictureProperties.Append(new DocumentFormat.OpenXml.Presentation.NonVisualDrawingProperties
+            picture.NonVisualPictureProperties = new NonVisualPictureProperties();
+            var drawingProperties = new NonVisualDrawingProperties
             {
                 Name = "My Shape",
                 Id = (UInt32)tree.ChildElements.Count - 1,
-            });
-            
-            
-            //add the part idk why:
-            //https://social.msdn.microsoft.com/Forums/office/en-US/a0a7e52b-6686-4ac6-8e2e-a6d5ec1e9d59/read-write-tags-in-powerpoint-using-openxml-in-c?forum=oxmlsdk
-            //  UserDefinedTagsPart userTags = slidePart.AddNewPart<UserDefinedTagsPart>("rId2");
+            };
 
-            //Add a tag list to the p:NvPicPr w/ metadata tags
-            // TagList tagList1 = new TagList();
-            // Tag tag1 = new Tag() { Name = "SHAPETAG", Val = "shapeTagValue" };
-            // tagList1.Append(tag1);
-            // tagList1.AddNamespaceDeclaration("p", "http://schemas.openxmlformats.org/presentationml/2006/main");
-            // picture.NonVisualPictureProperties.Append(tagList1);
-            // userTags.TagList = tagList1;
+            picture.NonVisualPictureProperties.Append(drawingProperties);
 
-            // CustomTag.AddCustomTagToPicture("Test", "Value is 100", presentationPart, picture);
-
-            var nonVisualPictureDrawingProperties = new DocumentFormat.OpenXml.Presentation.NonVisualPictureDrawingProperties();
+            var nonVisualPictureDrawingProperties = new NonVisualPictureDrawingProperties();
             nonVisualPictureDrawingProperties.Append(new DocumentFormat.OpenXml.Drawing.PictureLocks()
             {
                 NoChangeAspect = true
             });
             picture.NonVisualPictureProperties.Append(nonVisualPictureDrawingProperties);
-            picture.NonVisualPictureProperties.Append(new DocumentFormat.OpenXml.Presentation.ApplicationNonVisualDrawingProperties());
+            picture.NonVisualPictureProperties.Append(new ApplicationNonVisualDrawingProperties());
 
             var blipFill = new DocumentFormat.OpenXml.Presentation.BlipFill();
             var blip1 = new DocumentFormat.OpenXml.Drawing.Blip()
@@ -75,7 +60,7 @@ public partial class Image
             var blipExtensionList1 = new DocumentFormat.OpenXml.Drawing.BlipExtensionList();
             var blipExtension1 = new DocumentFormat.OpenXml.Drawing.BlipExtension()
             {
-                Uri = "{hello}"
+                Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}"
             };
             var useLocalDpi1 = new DocumentFormat.OpenXml.Office2010.Drawing.UseLocalDpi()
             {
@@ -107,6 +92,20 @@ public partial class Image
             {
                 Preset = DocumentFormat.OpenXml.Drawing.ShapeTypeValues.Rectangle
             });
+
+        
+            /* 
+            Add Blip Extension to drawing Properties (p:cNvPr).
+            Blip Extension is used since it persists(idk why, just trial and error)
+            */
+            var blipExtensionList2 = new DocumentFormat.OpenXml.Drawing.BlipExtensionList();
+            var blipExtension2 = new DocumentFormat.OpenXml.Drawing.BlipExtension()
+            {
+                Uri = "{generated-asset}"
+            };
+            blipExtension2.InnerXml = "<Type xmlns=\"\">line-graph</Type>";
+            blipExtensionList2.Append(blipExtension2);
+            drawingProperties.Append(blipExtensionList2);
 
             tree.Append(picture);
         }
