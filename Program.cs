@@ -3,12 +3,13 @@ using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
 
-string docPath = "assets/test.pptx";
+string docPath = "assets/test-2.pptx";
 string imageName = "assets/line_graph.png";
-Console.WriteLine(NumberOfSlides.RetrieveNumberOfSlides(docPath, true));
+string replacementImage = "assets/cisco.png";
+// Console.WriteLine(NumberOfSlides.RetrieveNumberOfSlides(docPath, true));
 
-Image.AddImage(docPath, imageName);
+// Image.AddImage(docPath, imageName, "type", "test value");
 
-//Image.ReplaceImage(docPath, "SHAPETAG");
+Image.ReplaceImage(docPath, replacementImage);
 
 //now run the program which replaces an image based on its tag

@@ -1,11 +1,13 @@
-using PackagingObj = DocumentFormat.OpenXml.Packaging;
-using PresentationObj = DocumentFormat.OpenXml.Presentation;
-using DrawingObj = DocumentFormat.OpenXml.Drawing;
+using PackagingNs = DocumentFormat.OpenXml.Packaging;
+using PresentationNs = DocumentFormat.OpenXml.Presentation;
+using DrawingNs = DocumentFormat.OpenXml.Drawing;
+//^namespaces defined for clarity and ease of reading
+
 public partial class Image
 {
-    public static void AddImage(string file, string image)
+    public static void AddImage(string file, string imagePath, string tagName, string tagValue)
     {
-        using (var presentation = PackagingObj.PresentationDocument.Open(file, true))
+        using (var presentation = PackagingNs.PresentationDocument.Open(file, true))
         {   
             var presentationPart = presentation.PresentationPart; 
             if (presentationPart == null){
@@ -24,39 +26,39 @@ public partial class Image
             //begin image creation code - taken from online 
             //reference: https://stackoverflow.com/questions/35361079/how-i-add-image-in-powerpoint-with-openxml-c-sharp
             var part = slidePart
-                .AddImagePart(PackagingObj.ImagePartType.Png);
-            using (var stream = File.OpenRead(image))
+                .AddImagePart(PackagingNs.ImagePartType.Png);
+            using (var stream = File.OpenRead(imagePath))
             {
                 part.FeedData(stream);
             }
             var tree = slidePart
                 .Slide
-                .Descendants<PresentationObj.ShapeTree>()
+                .Descendants<PresentationNs.ShapeTree>()
                 .First();
-            var picture = new PresentationObj.Picture();
-            picture.NonVisualPictureProperties = new PresentationObj.NonVisualPictureProperties();
-            var drawingProperties = new PresentationObj.NonVisualDrawingProperties
+            var picture = new PresentationNs.Picture();
+            picture.NonVisualPictureProperties = new PresentationNs.NonVisualPictureProperties();
+            var drawingProperties = new PresentationNs.NonVisualDrawingProperties
             {
                 Name = "Generated Shape",
                 Id = (UInt32)tree.ChildElements.Count - 1,
             };
             picture.NonVisualPictureProperties.Append(drawingProperties);
 
-            var nonVisualPictureDrawingProperties = new PresentationObj.NonVisualPictureDrawingProperties();
-            nonVisualPictureDrawingProperties.Append(new DrawingObj.PictureLocks()
+            var nonVisualPictureDrawingProperties = new PresentationNs.NonVisualPictureDrawingProperties();
+            nonVisualPictureDrawingProperties.Append(new DrawingNs.PictureLocks()
             {
                 NoChangeAspect = true
             });
             picture.NonVisualPictureProperties.Append(nonVisualPictureDrawingProperties);
-            picture.NonVisualPictureProperties.Append(new PresentationObj.ApplicationNonVisualDrawingProperties());
+            picture.NonVisualPictureProperties.Append(new PresentationNs.ApplicationNonVisualDrawingProperties());
 
-            var blipFill = new PresentationObj.BlipFill();
-            var blip1 = new DrawingObj.Blip()
+            var blipFill = new PresentationNs.BlipFill();
+            var blip1 = new DrawingNs.Blip()
             {
                 Embed = slidePart.GetIdOfPart(part)
             };
-            var blipExtensionList1 = new DrawingObj.BlipExtensionList();
-            var blipExtension1 = new DrawingObj.BlipExtension()
+            var blipExtensionList1 = new DrawingNs.BlipExtensionList();
+            var blipExtension1 = new DrawingNs.BlipExtension()
             {
                 Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}"
             };
@@ -68,27 +70,27 @@ public partial class Image
             blipExtension1.Append(useLocalDpi1);
             blipExtensionList1.Append(blipExtension1);
             blip1.Append(blipExtensionList1);
-            var stretch = new DrawingObj.Stretch();
-            stretch.Append(new DrawingObj.FillRectangle());
+            var stretch = new DrawingNs.Stretch();
+            stretch.Append(new DrawingNs.FillRectangle());
             blipFill.Append(blip1);
             blipFill.Append(stretch);
             picture.Append(blipFill);
 
-            picture.ShapeProperties = new PresentationObj.ShapeProperties();
-            picture.ShapeProperties.Transform2D = new DrawingObj.Transform2D();
-            picture.ShapeProperties.Transform2D.Append(new DrawingObj.Offset
+            picture.ShapeProperties = new PresentationNs.ShapeProperties();
+            picture.ShapeProperties.Transform2D = new DrawingNs.Transform2D();
+            picture.ShapeProperties.Transform2D.Append(new DrawingNs.Offset
             {
                 X = 0,
                 Y = 0,
             });
-            picture.ShapeProperties.Transform2D.Append(new DrawingObj.Extents
+            picture.ShapeProperties.Transform2D.Append(new DrawingNs.Extents
             {
                 Cx = 1000000,
                 Cy = 1000000,
             });
-            picture.ShapeProperties.Append(new DrawingObj.PresetGeometry
+            picture.ShapeProperties.Append(new DrawingNs.PresetGeometry
             {
-                Preset = DrawingObj.ShapeTypeValues.Rectangle
+                Preset = DrawingNs.ShapeTypeValues.Rectangle
             });
 
         
@@ -96,12 +98,12 @@ public partial class Image
             Add Blip Extension to drawing Properties (p:cNvPr).
             Blip Extension is used since it persists(idk why, just trial and error)
             */
-            var blipExtensionList2 = new DrawingObj.BlipExtensionList();
-            var blipExtension2 = new DrawingObj.BlipExtension()
+            var blipExtensionList2 = new DrawingNs.BlipExtensionList();
+            var blipExtension2 = new DrawingNs.BlipExtension()
             {
                 Uri = "{generated-asset}"
             };
-            blipExtension2.InnerXml = "<Type xmlns=\"\">line-graph</Type>";
+            blipExtension2.InnerXml = $"<{tagName} xmlns=\"\">{tagValue}</{tagName}>";
             blipExtensionList2.Append(blipExtension2);
             drawingProperties.Append(blipExtensionList2);
 
