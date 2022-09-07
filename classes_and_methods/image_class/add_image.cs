@@ -5,7 +5,7 @@ using DrawingNs = DocumentFormat.OpenXml.Drawing;
 
 public partial class Image
 {
-    public static void AddImage(string file, string imagePath, string tagName, string tagValue)
+    public static void AddImage(string file, string imagePath,  PropertyTag[] properties)
     {
         using (var presentation = PackagingNs.PresentationDocument.Open(file, true))
         {   
@@ -103,7 +103,9 @@ public partial class Image
             {
                 Uri = "{generated-asset}"
             };
-            blipExtension2.InnerXml = $"<{tagName} xmlns=\"\">{tagValue}</{tagName}>";
+            blipExtension2.InnerXml = string.Join(' ', properties.Select((p)=> $"<{p.tagName} xmlns=\"\">{p.tagValue}</{p.tagName}>"));
+
+
             blipExtensionList2.Append(blipExtension2);
             drawingProperties.Append(blipExtensionList2);
 

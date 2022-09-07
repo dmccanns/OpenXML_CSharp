@@ -2,6 +2,9 @@ using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using PresentationNs = DocumentFormat.OpenXml.Presentation;
 using DrawingNs = DocumentFormat.OpenXml.Drawing;
+
+//reference:
+//https://social.technet.microsoft.com/wiki/contents/articles/17967.processing-power-point-templates-using-openxml.aspx
 public partial class Image
 {
     public static void ReplaceImage(string file, string replacementImagePath)
