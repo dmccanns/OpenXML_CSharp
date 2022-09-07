@@ -1,11 +1,12 @@
 using PackagingNs = DocumentFormat.OpenXml.Packaging;
 using PresentationNs = DocumentFormat.OpenXml.Presentation;
 using DrawingNs = DocumentFormat.OpenXml.Drawing;
-//general methods
+
+//general methods - Daniel MS
 public class General
 {
     //returns an ordered list of slides for a given presentation
-    List<PackagingNs.SlidePart> getOrderedSlides(PackagingNs.PresentationPart presentationPart)
+    public static List<PackagingNs.SlidePart> getOrderedSlides(PackagingNs.PresentationPart presentationPart)
     {
         List<PackagingNs.SlidePart> orderedSlideList = new List<PackagingNs.SlidePart>();
 
@@ -21,15 +22,13 @@ public class General
         {
             // get the Part by its RelationshipId - relationshipId is mandatory so can't be null
             var slidePart = presentationPart.GetPartById(slideId.RelationshipId!);
-
-            //again, if slidePart is not a SlidePart the ppt file is messed up
             if (slidePart is PackagingNs.SlidePart)
             {
                 //casting it since it was giving me an annoying warning. Could def be rewritten
                 var slidePartCast = slidePart as PackagingNs.SlidePart;
                 orderedSlideList.Add(slidePartCast!);
             }
-            else
+            else //again, if slidePart is not a SlidePart the ppt file is messed up
             {
                 Console.WriteLine("Your file is messed up");
                 throw new Exception();
@@ -37,4 +36,5 @@ public class General
         }
         return orderedSlideList;
     }
+    //Get properties of the generated images
 }

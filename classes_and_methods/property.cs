@@ -1,4 +1,6 @@
-public class PropertyTag{
-    public string tagName = null!;
-    public string tagValue =  null!;
+public class CustomProperties{
+    public string type =  null!;
+    public int bookmark;
+    public int project;
+    public int workspace;
 }

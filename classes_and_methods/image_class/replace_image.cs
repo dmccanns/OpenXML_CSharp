@@ -1,15 +1,18 @@
-using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using PresentationNs = DocumentFormat.OpenXml.Presentation;
 using DrawingNs = DocumentFormat.OpenXml.Drawing;
 
-//reference:
-//https://social.technet.microsoft.com/wiki/contents/articles/17967.processing-power-point-templates-using-openxml.aspx
+/* One of two parts of image class - Daniel MS
+reference:
+https://social.technet.microsoft.com/wiki/contents/articles/17967.processing-power-point-templates-using-openxml.aspx
+*/
+
 public partial class Image
 {
-    public static void ReplaceImage(string file, string replacementImagePath)
+    //TODO: split this function into two pieces, one that just gets the list of images, and one that gets the list of images and then replaces them
+    public static void ReplaceImage(string filePath, string replacementImagePath)
     {
-        using (var presentation = PresentationDocument.Open(file, true))
+        using (var presentation = PresentationDocument.Open(filePath, true))
         {
             var slideParts = presentation
                 .PresentationPart
@@ -45,19 +48,20 @@ public partial class Image
                                     );
                                     if (extensions.Count() > 0)
                                     {
-                                        //TODO: add them to a list or something
+                                        
                                         foreach (var extension in extensions)
                                         {
                                             var tags = extension.Descendants();
                                             foreach (var tag in tags)
                                             {
+                                                //TODO: add them to a new CustomProperty Object
                                                 // Console.WriteLine("Tag Pair");
                                                 // Console.WriteLine(tag.LocalName);
                                                 // Console.WriteLine(tag.InnerText);
                                                 // Console.WriteLine(' ');
                                             }
                                         }
-                                        //add this element to the picture list
+                                        //TODO: add CustomProperty obj to list
                                         return true;
                                     }
 
